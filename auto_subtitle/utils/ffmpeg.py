@@ -66,3 +66,18 @@ def overlay_subtitles(subtitles: dict, output_dir: str, sample_interval: list):
             ).output(out_path, **ffmpeg_output_args).run(quiet=True, overwrite_output=True)
 
         print(f"Saved subtitled video to {os.path.abspath(out_path)}.")
+
+
+def add_subs_new(subtitles: dict, output_dir: str, sample_interval: list):
+    import ffmpeg as fmp
+    input_file = list(subtitles.keys())[0]
+    subtitle_file = subtitles[input_file]
+    output_file = 'class.mp4'
+
+    input_stream = fmp.input(input_file)
+    subtitle_stream = fmp.input(subtitle_file)
+
+    # Combine input video and subtitle
+    output = fmp.output(input_stream, subtitle_stream, output_dir + '/' + output_file.replace('.mkv','.mp4'), c='copy', **{'c:s': 'mov_text'}, **{'metadata:s:s:0': 'language=eng'})
+
+    fmp.run(output)
