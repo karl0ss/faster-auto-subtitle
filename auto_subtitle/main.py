@@ -1,9 +1,10 @@
 import os
 import warnings
 import tempfile
-from .utils.files import filename, write_srt
-from .utils.ffmpeg import get_audio, overlay_subtitles
-from .utils.whisper import WhisperAI
+from utils.files import filename, write_srt
+from utils.ffmpeg import get_audio, overlay_subtitles, add_subs_new
+from utils.bazarr import get_wanted_episodes, get_episode_details
+from utils.whisper import WhisperAI
 
 
 def process(args: dict):
@@ -23,7 +24,12 @@ def process(args: dict):
     # if translate task used and language argument is set, then use it
     elif language != "auto":
         args["language"] = language
-
+        
+    a = get_wanted_episodes()
+    print(f"Found {a['total']} episodes needing subtitles.")
+    for episode in a['data']:
+        episode_data = get_episode_details(episode['sonarrEpisodeId'])
+        print(episode_data)
     audios = get_audio(args.pop("video"), args.pop(
         'audio_channel'), sample_interval)
 
@@ -38,7 +44,7 @@ def process(args: dict):
     if srt_only:
         return
 
-    overlay_subtitles(subtitles, output_dir, sample_interval)
+    add_subs_new(subtitles, output_dir, sample_interval)
 
 
 def get_subtitles(audio_paths: list, output_dir: str,

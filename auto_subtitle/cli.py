@@ -1,8 +1,8 @@
 import argparse
 from faster_whisper import available_models
-from .utils.constants import LANGUAGE_CODES
-from .main import process
-from .utils.convert import str2bool, str2timeinterval
+from utils.constants import LANGUAGE_CODES
+from main import process
+from utils.convert import str2bool, str2timeinterval
 
 
 def main():
