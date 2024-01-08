@@ -39,4 +39,5 @@ def sync_series():
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
-    return response.json()['data'][0]
+    if response.status_code == 204:
+        print('Updated Bazarr')
