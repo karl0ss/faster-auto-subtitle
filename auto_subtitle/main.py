@@ -11,14 +11,14 @@ from utils.whisper import WhisperAI
 
 def process(args: dict):
     model_name: str = args.pop("model")
-    output_dir: str = args.pop("output_dir")
-    output_srt: bool = args.pop("output_srt")
-    srt_only: bool = args.pop("srt_only")
+    # output_dir: str = args.pop("output_dir")
+    # output_srt: bool = args.pop("output_srt")
+    # srt_only: bool = args.pop("srt_only")
     language: str = args.pop("language")
     sample_interval: str = args.pop("sample_interval")
     audio_channel: str = args.pop('audio_channel')
 
-    os.makedirs(output_dir, exist_ok=True)
+    # os.makedirs(output_dir, exist_ok=True)
 
     if model_name.endswith(".en"):
         warnings.warn(
@@ -39,11 +39,11 @@ def process(args: dict):
         print(f"Processing {episode['seriesTitle']} - {episode['episode_number']}")
         episode_data = get_episode_details(episode['sonarrEpisodeId'])
         audios = get_audio([episode_data['path']], audio_channel, sample_interval)
-        srt_output_dir = output_dir if output_srt or srt_only else tempfile.gettempdir()
-        subtitles = get_subtitles(audios, srt_output_dir, model_args, args)
+        # srt_output_dir = output_dir if output_srt or srt_only else tempfile.gettempdir()
+        subtitles = get_subtitles(audios, tempfile.gettempdir(), model_args, args)
 
-        if srt_only:
-            return
+        # if srt_only:
+        #     return
 
         add_subs_new(subtitles)
         update_show_in_soarr(episode['sonarrSeriesId'])
