@@ -1,8 +1,8 @@
 import argparse
 from faster_whisper import available_models
-from .utils.constants import LANGUAGE_CODES
-from .main import process
-from .utils.convert import str2bool, str2timeinterval
+from utils.constants import LANGUAGE_CODES
+from main import process
+from utils.convert import str2bool, str2timeinterval
 
 
 def main():
@@ -14,8 +14,6 @@ def main():
     """
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("video", nargs="+", type=str,
-                        help="paths to video files to transcribe")
     parser.add_argument("--audio_channel", default="0",
                         type=int, help="audio channel index to use")
     parser.add_argument("--sample_interval", type=str2timeinterval, default=None,

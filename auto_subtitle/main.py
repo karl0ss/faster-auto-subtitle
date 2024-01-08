@@ -1,9 +1,12 @@
 import os
 import warnings
 import tempfile
-from .utils.files import filename, write_srt
-from .utils.ffmpeg import get_audio, overlay_subtitles
-from .utils.whisper import WhisperAI
+import time
+from utils.files import filename, write_srt
+from utils.ffmpeg import get_audio, add_subs_new
+from utils.bazarr import get_wanted_episodes, get_episode_details, sync_series
+from utils.sonarr import update_show_in_soarr
+from utils.whisper import WhisperAI
 
 
 def process(args: dict):
@@ -13,6 +16,7 @@ def process(args: dict):
     srt_only: bool = args.pop("srt_only")
     language: str = args.pop("language")
     sample_interval: str = args.pop("sample_interval")
+    audio_channel: str = args.pop('audio_channel')
 
     os.makedirs(output_dir, exist_ok=True)
 
@@ -24,21 +28,28 @@ def process(args: dict):
     elif language != "auto":
         args["language"] = language
 
-    audios = get_audio(args.pop("video"), args.pop(
-        'audio_channel'), sample_interval)
-
     model_args = {}
     model_args["model_size_or_path"] = model_name
     model_args["device"] = args.pop("device")
     model_args["compute_type"] = args.pop("compute_type")
+        
+    list_of_episodes_needing_subtitles = get_wanted_episodes()
+    print(f"Found {list_of_episodes_needing_subtitles['total']} episodes needing subtitles.")
+    for episode in list_of_episodes_needing_subtitles['data']:
+        print(f"Processing {episode['seriesTitle']} - {episode['episode_number']}")
+        episode_data = get_episode_details(episode['sonarrEpisodeId'])
+        audios = get_audio([episode_data['path']], audio_channel, sample_interval)
+        srt_output_dir = output_dir if output_srt or srt_only else tempfile.gettempdir()
+        subtitles = get_subtitles(audios, srt_output_dir, model_args, args)
 
-    srt_output_dir = output_dir if output_srt or srt_only else tempfile.gettempdir()
-    subtitles = get_subtitles(audios, srt_output_dir, model_args, args)
+        if srt_only:
+            return
 
-    if srt_only:
-        return
-
-    overlay_subtitles(subtitles, output_dir, sample_interval)
+        add_subs_new(subtitles)
+        update_show_in_soarr(episode['sonarrSeriesId'])
+        time.sleep(5)
+        sync_series()
+        
 
 
 def get_subtitles(audio_paths: list, output_dir: str,
