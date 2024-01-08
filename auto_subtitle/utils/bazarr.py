@@ -1,9 +1,13 @@
 import requests
-import os
-token = os.getenv('bazarr_token')
+import configparser
+config = configparser.RawConfigParser()
+config.read('config.cfg')
+
+token = config._sections['bazarr']['token']
+base_url = config._sections['bazarr']['url']
 
 def get_wanted_episodes():
-    url = "http://192.168.4.23/api/episodes/wanted"
+    url = f"{base_url}/api/episodes/wanted"
 
     payload={}
     headers = {
@@ -17,7 +21,7 @@ def get_wanted_episodes():
 
 
 def get_episode_details(episode_id: str):
-    url = f"http://192.168.4.23/api/episodes?episodeid%5B%5D={episode_id}"
+    url = f"{base_url}/api/episodes?episodeid%5B%5D={episode_id}"
 
     payload={}
     headers = {
@@ -30,7 +34,7 @@ def get_episode_details(episode_id: str):
 
 
 def sync_series():
-    url = f"http://192.168.4.23/api/system/tasks?taskid=update_series"
+    url = f"{base_url}/api/system/tasks?taskid=update_series"
 
     payload={}
     headers = {

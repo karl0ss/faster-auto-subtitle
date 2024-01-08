@@ -1,10 +1,14 @@
 import requests
 import json
-import os
-token = os.getenv('sonarr_token')
+import configparser
+config = configparser.RawConfigParser()
+config.read('config.cfg')
+
+token = config._sections['sonarr']['token']
+base_url = config._sections['sonarr']['url']
 
 def update_show_in_soarr(show_id):
-    url = "http://192.168.4.9:8989/api/v3/command"
+    url = f"{base_url}/api/v3/command"
 
     payload = json.dumps({
     "name": "RefreshSeries",
