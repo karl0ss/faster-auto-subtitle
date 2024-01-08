@@ -1,27 +1,17 @@
-# Automatic subtitles in your videos
+# bazarr-ai-sub-generator
 
-This is a fork of [auto_subtitle](https://github.com/m1guelpf/auto-subtitle) using [faster-whisper](https://github.com/SYSTRAN/faster-whisper) implementation.
+This is a fork of [faster-auto-subtitle](https://github.com/Sirozha1337/faster-auto-subtitle) using [faster-whisper](https://github.com/SYSTRAN/faster-whisper) implementation.
 
 This repository uses `ffmpeg` and [OpenAI's Whisper](https://openai.com/blog/whisper) to automatically generate and overlay subtitles on any video.
 
+This script will connect to your Bazarr instance to get a list of shows that require subtitles and start processing each video to create, by default Engligh subs, these are then written to the file as Soft subtitles.
+
+It will then send an update to Sonarr and once that is done update the file in Bazarr and move onto the next file.
+
+Clunky, and slow, but works.
+
 ## Installation
 
-To get started, you'll need Python 3.7 or newer. Install the binary by running the following command:
-
-    pip install git+https://github.com/Sirozha1337/faster-auto-subtitle.git@dev
-
-You'll also need to install [`ffmpeg`](https://ffmpeg.org/), which is available from most package managers:
-
-```bash
-# on Ubuntu or Debian
-sudo apt update && sudo apt install ffmpeg
-
-# on MacOS using Homebrew (https://brew.sh/)
-brew install ffmpeg
-
-# on Windows using Chocolatey (https://chocolatey.org/)
-choco install ffmpeg
-```
 
 ## Usage
 
