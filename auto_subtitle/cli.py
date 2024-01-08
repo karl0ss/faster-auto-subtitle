@@ -29,12 +29,6 @@ def main():
                         "int16", "float16", "bfloat16", "float32"],
                         help="Type to use for computation. \
                               See https://opennmt.net/CTranslate2/quantization.html.")
-    parser.add_argument("--output_dir", "-o", type=str,
-                        default=".", help="directory to save the outputs")
-    parser.add_argument("--output_srt", type=str2bool, default=False,
-                        help="whether to output the .srt file along with the video files")
-    parser.add_argument("--srt_only", type=str2bool, default=False,
-                        help="only generate the .srt file and not create overlayed video")
     parser.add_argument("--beam_size", type=int, default=5,
                         help="model parameter, tweak to increase accuracy")
     parser.add_argument("--no_speech_threshold", type=float, default=0.6,

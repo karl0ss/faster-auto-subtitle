@@ -15,7 +15,7 @@ Clunky, and slow, but works.
 
 ## Usage
 
-The following command will generate a `subtitled/video.mp4` file contained the input video with overlayed subtitles.
+<!-- The following command will generate a `subtitled/video.mp4` file contained the input video with overlayed subtitles.
 
     faster_auto_subtitle /path/to/video.mp4 -o subtitled/
 
@@ -47,4 +47,4 @@ You can use `sample_interval` parameter to generate subtitles for a portion of t
 
 ## License
 
-This script is open-source and licensed under the MIT License. For more details, check the [LICENSE](LICENSE) file.
+This script is open-source and licensed under the MIT License. For more details, check the [LICENSE](LICENSE) file. -->

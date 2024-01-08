@@ -1,0 +1,6 @@
+[bazarr]  
+url = http://1.1.1.1
+token = djfkjadncdfjkanvfjkvandfj  
+[sonarr]
+url = http://2.2.2.2:8989
+token = dfifdmnajcdnjcvaldnjlk
