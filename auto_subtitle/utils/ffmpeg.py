@@ -51,5 +51,6 @@ def add_subs_new(subtitles: dict):
     output = ffmpeg.output(input_stream, subtitle_stream, output_file.replace('.mkv','.mp4'), c='copy', **{'c:s': 'mov_text'}, **{'metadata:s:s:0': 'language=eng'})
     ffmpeg.run(output, quiet=True, overwrite_output=True)
     os.remove(input_file+'_edit')
-    if '.mkv' in output_file:
-        os.remove(output_file)
+    # remove tempfiles
+    os.remove(subtitle_file)
+    os.remove(subtitle_file.replace(".srt",".wav"))
