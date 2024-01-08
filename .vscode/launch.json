@@ -12,16 +12,19 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "args": [
-                "Class of '92 - Out of Their League - S08E03 - Episode 3 HDTV-1080p.mkv",
-                // "--model",
-                // "base",
+                // "Class of '92 - Out of Their League - S08E03 - Episode 3 HDTV-1080p.mkv",
+                "--model",
+                "base",
                 // "--srt_only",
                 // "TRUE",
-                "--output_srt",
-                "TRUE",
+                // "--output_srt",
+                // "TRUE",
                 "-o",
                 "./test"
-            ]
+            ],
+            "env": {
+                "token": ""
+            }
         }
     ]
 }
