@@ -1,7 +1,6 @@
 import os
 import tempfile
 import ffmpeg
-from .mytempfile import MyTempFile
 from .files import filename
 
 
@@ -37,7 +36,7 @@ def get_audio(paths: list, audio_channel_index: int, sample_interval: list):
     return audio_paths
 
 
-def add_subs_new(subtitles: dict):
+def add_subtitles_to_mp4(subtitles: dict):
     
     input_file = list(subtitles.keys())[0]
     subtitle_file = subtitles[input_file]
