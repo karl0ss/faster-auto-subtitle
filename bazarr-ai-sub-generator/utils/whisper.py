@@ -2,6 +2,7 @@ import warnings
 import faster_whisper
 from tqdm import tqdm
 
+
 # pylint: disable=R0903
 class WhisperAI:
     """

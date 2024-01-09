@@ -8,37 +8,42 @@ def str2bool(string: str):
     if string in str2val:
         return str2val[string]
 
-    raise ValueError(
-        f"Expected one of {set(str2val.keys())}, got {string}")
+    raise ValueError(f"Expected one of {set(str2val.keys())}, got {string}")
 
 
 def str2timeinterval(string: str):
     if string is None:
         return None
 
-    if '-' not in string:
+    if "-" not in string:
         raise ValueError(
-            f"Expected time interval HH:mm:ss-HH:mm:ss or HH:mm-HH:mm or ss-ss, got {string}")
+            f"Expected time interval HH:mm:ss-HH:mm:ss or HH:mm-HH:mm or ss-ss, got {string}"
+        )
 
-    intervals = string.split('-')
+    intervals = string.split("-")
     if len(intervals) != 2:
         raise ValueError(
-            f"Expected time interval HH:mm:ss-HH:mm:ss or HH:mm-HH:mm or ss-ss, got {string}")
+            f"Expected time interval HH:mm:ss-HH:mm:ss or HH:mm-HH:mm or ss-ss, got {string}"
+        )
 
     start = try_parse_timestamp(intervals[0])
     end = try_parse_timestamp(intervals[1])
     if start >= end:
         raise ValueError(
-            f"Expected time interval end to be higher than start, got {start} >= {end}")
+            f"Expected time interval end to be higher than start, got {start} >= {end}"
+        )
 
     return [start, end]
 
 
 def time_to_timestamp(string: str):
-    split_time = string.split(':')
-    if len(split_time) == 0 or len(split_time) > 3 or not all(x.isdigit() for x in split_time):
-        raise ValueError(
-            f"Expected HH:mm:ss or HH:mm or ss, got {string}")
+    split_time = string.split(":")
+    if (
+        len(split_time) == 0
+        or len(split_time) > 3
+        or not all(x.isdigit() for x in split_time)
+    ):
+        raise ValueError(f"Expected HH:mm:ss or HH:mm or ss, got {string}")
 
     if len(split_time) == 1:
         return int(split_time[0])
@@ -50,22 +55,21 @@ def time_to_timestamp(string: str):
 
 
 def try_parse_timestamp(string: str):
-    timestamp = parse_timestamp(string, '%H:%M:%S')
+    timestamp = parse_timestamp(string, "%H:%M:%S")
     if timestamp is not None:
         return timestamp
 
-    timestamp = parse_timestamp(string, '%H:%M')
+    timestamp = parse_timestamp(string, "%H:%M")
     if timestamp is not None:
         return timestamp
 
-    return parse_timestamp(string, '%S')
+    return parse_timestamp(string, "%S")
 
 
 def parse_timestamp(string: str, pattern: str):
     try:
         date = datetime.strptime(string, pattern)
-        delta = timedelta(
-            hours=date.hour, minutes=date.minute, seconds=date.second)
+        delta = timedelta(hours=date.hour, minutes=date.minute, seconds=date.second)
         return int(delta.total_seconds())
     except:  # pylint: disable=bare-except
         return None
