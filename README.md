@@ -1,6 +1,6 @@
 # bazarr-ai-sub-generator
 
-This is a fork of [faster-auto-subtitle](https://github.com/Sirozha1337/faster-auto-subtitle) using [faster-whisper](https://github.com/SYSTRAN/faster-whisper) implementation.
+This is a rework of [faster-auto-subtitle](https://github.com/Sirozha1337/faster-auto-subtitle) using [faster-whisper](https://github.com/SYSTRAN/faster-whisper) implementation.
 
 This repository uses `ffmpeg` and [OpenAI's Whisper](https://openai.com/blog/whisper) to automatically generate and overlay subtitles on any video.
 
