@@ -7,7 +7,6 @@ setup(
     py_modules=["bazarr-ai-sub-generator"],
     author="Karl Hudgell",
     install_requires=[
-        'faster-whisper',
         'tqdm',
         'ffmpeg-python'
     ],

@@ -11,12 +11,15 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": false,
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "1"
+            },
             "args": [
                 "--model",
                 "base",
                 "--show",
                 "Gary Neville's Soccerbox"
-            ],
+            ]
         }
     ]
 }

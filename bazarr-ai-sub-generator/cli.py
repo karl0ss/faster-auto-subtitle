@@ -77,7 +77,6 @@ def main():
         "--show",
         type=str,
         default=None,
-        #choices=["transcribe", "translate"],
         help="whether to perform X->X speech recognition ('transcribe') \
                               or X->English translation ('translate')",
     )

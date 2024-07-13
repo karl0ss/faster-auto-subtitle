@@ -7,27 +7,14 @@ from utils.ffmpeg import get_audio, add_subtitles_to_mp4
 from utils.bazarr import get_wanted_episodes, get_episode_details, sync_series
 from utils.sonarr import update_show_in_sonarr
 from utils.whisper import WhisperAI
-
-def measure_time(func):
-    def wrapper(*args, **kwargs):
-        start_time = time.time()
-        result = func(*args, **kwargs)
-        end_time = time.time()
-        duration = end_time - start_time
-        print(f"Function '{func.__name__}' executed in: {duration:.6f} seconds")
-        return result
-    return wrapper
-
-
+from utils.decorator import measure_time
 
 def process(args: dict):
     
     model_name: str = args.pop("model")
     language: str = args.pop("language")
     show: str = args.pop("show")
-    # sample_interval: str = args.pop("sample_interval")
-    # audio_channel: str = args.pop("audio_channel")
-
+    
     if model_name.endswith(".en"):
         warnings.warn(
             f"{model_name} is an English-only model, forcing English detection."
@@ -38,10 +25,8 @@ def process(args: dict):
         args["language"] = language
 
     model_args = {}
-    # model_args["model_size_or_path"] = model_name
     model_args["device"] = args.pop("device")
-    # model_args["compute_type"] = args.pop("compute_type")
-
+    
     list_of_episodes_needing_subtitles = get_wanted_episodes(show)
     print(
         f"Found {list_of_episodes_needing_subtitles['total']} episodes needing subtitles."
