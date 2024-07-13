@@ -14,6 +14,8 @@
             "args": [
                 "--model",
                 "base",
+                "--show",
+                "Gary Neville's Soccerbox"
             ],
         }
     ]

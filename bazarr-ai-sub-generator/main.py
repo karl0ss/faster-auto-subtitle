@@ -24,8 +24,9 @@ def process(args: dict):
     
     model_name: str = args.pop("model")
     language: str = args.pop("language")
-    sample_interval: str = args.pop("sample_interval")
-    audio_channel: str = args.pop("audio_channel")
+    show: str = args.pop("show")
+    # sample_interval: str = args.pop("sample_interval")
+    # audio_channel: str = args.pop("audio_channel")
 
     if model_name.endswith(".en"):
         warnings.warn(
@@ -37,18 +38,18 @@ def process(args: dict):
         args["language"] = language
 
     model_args = {}
-    model_args["model_size_or_path"] = model_name
+    # model_args["model_size_or_path"] = model_name
     model_args["device"] = args.pop("device")
-    model_args["compute_type"] = args.pop("compute_type")
+    # model_args["compute_type"] = args.pop("compute_type")
 
-    list_of_episodes_needing_subtitles = get_wanted_episodes()
+    list_of_episodes_needing_subtitles = get_wanted_episodes(show)
     print(
         f"Found {list_of_episodes_needing_subtitles['total']} episodes needing subtitles."
     )
     for episode in list_of_episodes_needing_subtitles["data"]:
         print(f"Processing {episode['seriesTitle']} - {episode['episode_number']}")
         episode_data = get_episode_details(episode["sonarrEpisodeId"])
-        audios = get_audio([episode_data["path"]], audio_channel, sample_interval)
+        audios = get_audio([episode_data["path"]], 0, None)
         subtitles = get_subtitles(audios, tempfile.gettempdir(), model_args, args)
 
         add_subtitles_to_mp4(subtitles)
