@@ -8,15 +8,19 @@ token = config._sections["bazarr"]["token"]
 base_url = config._sections["bazarr"]["url"]
 
 
-def get_wanted_episodes():
+def get_wanted_episodes(show: str=None):
     url = f"{base_url}/api/episodes/wanted"
 
     payload = {}
     headers = {"accept": "application/json", "X-API-KEY": token}
 
     response = requests.request("GET", url, headers=headers, data=payload)
-
-    return response.json()
+    
+    data = response.json()
+    if show != None:
+        data['data'] = [item for item in data['data'] if item['seriesTitle'] == show]
+        data['total'] = len(data['data'])
+    return data
 
 
 def get_episode_details(episode_id: str):
