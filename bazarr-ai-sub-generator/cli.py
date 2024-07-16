@@ -55,24 +55,6 @@ def main():
     #     help="Type to use for computation. \
     #                           See https://opennmt.net/CTranslate2/quantization.html.",
     # )
-    # parser.add_argument(
-    #     "--beam_size",
-    #     type=int,
-    #     default=5,
-    #     help="model parameter, tweak to increase accuracy",
-    # )
-    # parser.add_argument(
-    #     "--no_speech_threshold",
-    #     type=float,
-    #     default=0.6,
-    #     help="model parameter, tweak to increase accuracy",
-    # )
-    # parser.add_argument(
-    #     "--condition_on_previous_text",
-    #     type=str2bool,
-    #     default=True,
-    #     help="model parameter, tweak to increase accuracy",
-    # )
     parser.add_argument(
         "--show",
         type=str,

@@ -6,6 +6,7 @@ from utils.files import filename, write_srt
 from utils.ffmpeg import get_audio, add_subtitles_to_mp4
 from utils.bazarr import get_wanted_episodes, get_episode_details, sync_series
 from utils.sonarr import update_show_in_sonarr
+# from utils.faster_whisper import WhisperAI
 from utils.whisper import WhisperAI
 from utils.decorator import measure_time
 
@@ -34,13 +35,16 @@ def process(args: dict):
     for episode in list_of_episodes_needing_subtitles["data"]:
         print(f"Processing {episode['seriesTitle']} - {episode['episode_number']}")
         episode_data = get_episode_details(episode["sonarrEpisodeId"])
-        audios = get_audio([episode_data["path"]], 0, None)
-        subtitles = get_subtitles(audios, tempfile.gettempdir(), model_args, args)
+        try:
+            audios = get_audio([episode_data["path"]], 0, None)
+            subtitles = get_subtitles(audios, tempfile.gettempdir(), model_args, args)
 
-        add_subtitles_to_mp4(subtitles)
-        update_show_in_sonarr(episode["sonarrSeriesId"])
-        time.sleep(5)
-        sync_series()
+            add_subtitles_to_mp4(subtitles)
+            update_show_in_sonarr(episode["sonarrSeriesId"])
+            time.sleep(5)
+            sync_series()
+        except Exception as ex:
+            print(f"skipping file due to - {ex}")
 
 @measure_time
 def get_subtitles(

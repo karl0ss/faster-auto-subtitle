@@ -6,19 +6,31 @@
     "configurations": [
         {
             "name": "Python Debugger: Current File",
-            "type": "debugpy",
+            "type": "python",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": false,
             "env": {
-                "CUDA_VISIBLE_DEVICES": "1"
+                "CUDA_VISIBLE_DEVICES": "1",
+                "LD_LIBRARY_PATH": "/home/karl/faster-auto-subtitle/venv/lib/python3.11/site-packages/nvidia/cublas/lib:/home/karl/faster-auto-subtitle/venv/lib/python3.11/site-packages/nvidia/cudnn/lib"
             },
             "args": [
                 "--model",
-                "base",
-                "--show",
-                "Gary Neville's Soccerbox"
+                "base"
+            ]
+        },
+        {
+            "name": "Current (withenv)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/run_with_env.sh",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "${file}",
+                "--model",
+                "base"
             ]
         }
     ]

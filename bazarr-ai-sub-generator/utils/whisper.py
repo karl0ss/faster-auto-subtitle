@@ -50,7 +50,7 @@ class WhisperAI:
         # Set device for computation
         self.device = torch.device(device)
         # Load the Whisper model with the specified size
-        self.model = whisper.load_model("base").to(self.device)
+        self.model = whisper.load_model("base.en").to(self.device)
         # Store the additional transcription arguments
         self.transcribe_args = transcribe_args
 
