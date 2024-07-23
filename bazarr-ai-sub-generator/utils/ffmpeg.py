@@ -4,6 +4,18 @@ import ffmpeg
 from .files import filename
 
 
+def check_for_subtitles(video_path:str):
+    # Probe the video file to get information about its streams
+    probe = ffmpeg.probe(video_path)
+    
+    # Check if there are any subtitle streams
+    for stream in probe['streams']:
+        if stream['codec_type'] == 'subtitle':
+            print("File has subtitles")
+            return True
+    
+    return False
+
 def get_audio(paths: list, audio_channel_index: int, sample_interval: list):
     temp_dir = tempfile.gettempdir()
 
