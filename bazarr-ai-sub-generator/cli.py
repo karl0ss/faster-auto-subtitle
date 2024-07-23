@@ -15,16 +15,6 @@ def main():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
-    # parser.add_argument(
-    #     "--audio_channel", default="0", type=int, help="audio channel index to use"
-    # )
-    # parser.add_argument(
-    #     "--sample_interval",
-    #     type=str2timeinterval,
-    #     default=None,
-    #     help="generate subtitles for a specific \
-    #                           fragment of the video (e.g. 01:02:05-01:03:45)",
-    # )
     parser.add_argument(
         "--model",
         default="small",
@@ -56,6 +46,18 @@ def main():
     #                           See https://opennmt.net/CTranslate2/quantization.html.",
     # )
     parser.add_argument(
+        "--file",
+        type=str,
+        default=None,
+        help="Process a single file"
+    )
+    parser.add_argument(
+        "--folder",
+        type=str,
+        default=None,
+        help="Process all videos in folder"
+    )
+    parser.add_argument(
         "--show",
         type=str,
         default=None,
@@ -70,7 +72,12 @@ def main():
         help="What is the origin language of the video? \
                               If unset, it is detected automatically.",
     )
-
+    parser.add_argument(
+        "--backend",
+        type=str,
+        default="whisper",
+        choices=["whisper", "faster_whisper"],
+    )
     args = parser.parse_args().__dict__
 
     process(args)
