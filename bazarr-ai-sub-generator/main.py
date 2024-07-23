@@ -11,57 +11,43 @@ from utils.whisper import WhisperAI
 from utils.decorator import measure_time
 
 
+def process_audio_and_subtitles(file_path, model_args, args, backend):
+    try:
+        audios = get_audio([file_path], 0, None)
+        subtitles = get_subtitles(audios, tempfile.gettempdir(), model_args, args, backend)
+        add_subtitles_to_mp4(subtitles)
+        time.sleep(5)
+    except Exception as ex:
+        print(f"Skipping file {file_path} due to - {ex}")
+
 
 def folder_flow(folder, model_args, args, backend):
-        print(f"Processing {folder}")
-        files = os.listdir(folder)
-        for file in files:
-            print(f"processing {file}")
-            path = folder+file
-            try:
-                audios = get_audio([path], 0, None)
-                subtitles = get_subtitles(audios, tempfile.gettempdir(), model_args, args, backend)
+    print(f"Processing folder {folder}")
+    files = os.listdir(folder)
+    for file in files:
+        path = os.path.join(folder, file)
+        print(f"Processing file {path}")
+        process_audio_and_subtitles(path, model_args, args, backend)
 
-                add_subtitles_to_mp4(subtitles)
-                time.sleep(5)
-            except Exception as ex:
-                print(f"skipping file due to - {ex}")
 
-def file_flow(show, model_args, args, backend):
-        print(f"Processing {show}")
-        try:
-            audios = get_audio([show], 0, None)
-            subtitles = get_subtitles(audios, tempfile.gettempdir(), model_args, args, backend)
+def file_flow(file_path, model_args, args, backend):
+    print(f"Processing file {file_path}")
+    process_audio_and_subtitles(file_path, model_args, args, backend)
 
-            add_subtitles_to_mp4(subtitles)
-            time.sleep(5)
-        except Exception as ex:
-            print(f"skipping file due to - {ex}")
 
 def bazzar_flow(show, model_args, args, backend):
     list_of_episodes_needing_subtitles = get_wanted_episodes(show)
-    print(
-        f"Found {list_of_episodes_needing_subtitles['total']} episodes needing subtitles."
-    )
+    print(f"Found {list_of_episodes_needing_subtitles['total']} episodes needing subtitles.")
     for episode in list_of_episodes_needing_subtitles["data"]:
         print(f"Processing {episode['seriesTitle']} - {episode['episode_number']}")
         episode_data = get_episode_details(episode["sonarrEpisodeId"])
-        try:
-            audios = get_audio([episode_data["path"]], 0, None)
-            subtitles = get_subtitles(audios, tempfile.gettempdir(), model_args, args, backend)
-
-            add_subtitles_to_mp4(subtitles)
-            update_show_in_sonarr(episode["sonarrSeriesId"])
-            time.sleep(5)
-            sync_series()
-        except Exception as ex:
-            print(f"skipping file due to - {ex}")
+        process_audio_and_subtitles(episode_data["path"], model_args, args, backend)
+        update_show_in_sonarr(episode["sonarrSeriesId"])
+        sync_series()
 
 
 @measure_time
-def get_subtitles(
-    audio_paths: list, output_dir: str, model_args: dict, transcribe_args: dict, backend: str
-):
+def get_subtitles(audio_paths: list, output_dir: str, model_args: dict, transcribe_args: dict, backend: str):
     if backend == 'whisper':
         model = WhisperAI(model_args, transcribe_args)
     else:
@@ -83,7 +69,6 @@ def get_subtitles(
 
 
 def process(args: dict):
-
     model_name: str = args.pop("model")
     language: str = args.pop("language")
     show: str = args.pop("show")
@@ -92,16 +77,12 @@ def process(args: dict):
     backend: str = args.pop("backend")
 
     if model_name.endswith(".en"):
-        warnings.warn(
-            f"{model_name} is an English-only model, forcing English detection."
-        )
+        warnings.warn(f"{model_name} is an English-only model, forcing English detection.")
         args["language"] = "en"
-    # if translate task used and language argument is set, then use it
     elif language != "auto":
         args["language"] = language
 
-    model_args = {}
-    model_args["device"] = args.pop("device")
+    model_args = {"device": args.pop("device")}
 
     if file:
         file_flow(file, model_args, args, backend)
