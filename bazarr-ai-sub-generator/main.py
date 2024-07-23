@@ -4,7 +4,7 @@ import tempfile
 import time
 from typing import List, Dict, Any
 from utils.files import filename, write_srt
-from utils.ffmpeg import get_audio, add_subtitles_to_mp4
+from utils.ffmpeg import get_audio, add_subtitles_to_mp4, check_for_subtitles
 from utils.bazarr import get_wanted_episodes, get_episode_details, sync_series
 from utils.sonarr import update_show_in_sonarr
 from utils.faster_whisper import WhisperAI as fasterWhisperAI
@@ -50,7 +50,8 @@ def folder_flow(folder: str, model_args: Dict[str, Any], args: Dict[str, Any], b
     for file in files:
         path = os.path.join(folder, file)
         print(f"Processing file {path}")
-        process_audio_and_subtitles(path, model_args, args, backend)
+        if not check_for_subtitles(path):
+            process_audio_and_subtitles(path, model_args, args, backend)
 
 
 def file_flow(file_path: str, model_args: Dict[str, Any], args: Dict[str, Any], backend: str) -> None:
@@ -66,7 +67,8 @@ def file_flow(file_path: str, model_args: Dict[str, Any], args: Dict[str, Any], 
         None
     """
     print(f"Processing file {file_path}")
-    process_audio_and_subtitles(file_path, model_args, args, backend)
+    if not check_for_subtitles(file_path):
+        process_audio_and_subtitles(file_path, model_args, args, backend)
 
 
 def bazzar_flow(show: str, model_args: Dict[str, Any], args: Dict[str, Any], backend: str) -> None:
